@@ -9,9 +9,12 @@ import MessageParser
 
 
 class MapScraper():
-    # PATH = "C:\\Users\\Aniruthan Ramadoss\\chromedriver.exe"
-    # driver = webdriver.Chrome(PATH)
-    # driver.get("https://ridebt.org/routes-schedules")
+    driver = None
+
+    def __init__(self):
+        PATH = "C:\\Users\\Aniruthan Ramadoss\\chromedriver.exe"
+        driver = webdriver.Chrome(PATH)
+        driver.get("https://ridebt.org/routes-schedules")
 
     def schedule_query(self, text_message):
         query_info = MessageParser.parse_message(text_message)
@@ -20,13 +23,25 @@ class MapScraper():
         delta = query_time - datetime.now()
 
         print(f'delta: {delta.seconds}')
-        timer = threading.Timer(delta.seconds, self.query_routes, [text_message])
+        timer = threading.Timer(delta.seconds, self.query_routes, [query_info])
         timer.start()
 
         print('Scheduled!!!')
 
-    def query_routes(self, text_message):
-        print(f'method called with args: {text_message}')
+    def query_routes(self, query_information):
+        stop_codes = {""}
+        result = []
+        if query_information[0] != "":
+            self.driver.get("https://ridebt.org/routes-schedules" + f"?route={query_information[0]}")
+            result = self.query_routes_with_bus()
+        # if query_information[2] == "":
+
+
+
+    def query_routes_with_bus(self):
+        return None
+
+
 
 
 scraper = MapScraper()
