@@ -6,6 +6,9 @@ A python transportation communication system that utilizes the phone service pro
 - Python
 - Twilio
 
+### P.S.
+If anybody would want to try this personally, they would need to clone the git repo and ensure that they have all the required python packages (can be installed through pip) such as selenium, flask, twilio. As well as downloading and setting up ngrok and making a personal Twilio account along w/ personalized auth/identification keys.
+
 
 ## Inspiration
 Virginia Tech students rely on an app called Blacksburg Transit(BT) to look at nearby buses and bus routes.  BT is bug-ridden as it commonly crashes and malfunctions on older phones.  Furthermore, it is a pain to use the mobile app to look at what buses come to a particular stop.  We created an application to solve this problem.
@@ -28,7 +31,6 @@ We used Twilio to create an SMS service that users can text and receive messages
 We struggled to find a proper SMS service.  Most of the ones we looked at required an initial premium fee, but we were skeptical to pay them in case the service did not fit our project's requirements.  However, we found Twilio to be the perfect service for us since it provided a free trial.  
 
 We all had minimal experience in using selenium and web-scraping.  It was a new experience for all 4 of us to utilize this technology.  It was initially difficult to understand but we were persevered and learned how to incorporate it into our project.  
-## Accomplishments that we're proud of
 
 ## What we learned
 We learned how to use Twilio to make an efficient SMS service and learned how to use Selenium to automate the gathering of information from websites.  Most of us also did not have much experience with python so we had to pick up on the syntax in a short duration of time.  
