@@ -33,6 +33,3 @@ def parse_message(text_message):
 
     return bus_route, location, stop_code, query_time
 
-
-text_message_sample = "TOM, Torgersen Hall, 1114, 1:07"
-print(parse_message(text_message_sample)[3])
