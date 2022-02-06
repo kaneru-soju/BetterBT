@@ -1,3 +1,5 @@
+![Better BT](https://i.imgur.com/6EWnYH4.png)
+
 # Better BT
 A python transportation communication system that utilizes the phone service provided by Blacksburg Transit that ensures students and residents in Blacksburg accurate upcoming bus times.
 
@@ -5,6 +7,8 @@ A python transportation communication system that utilizes the phone service pro
 - Selenium
 - Python
 - Twilio
+- Flask
+- Ngrok
 
 ### P.S.
 If anybody would want to try this personally, they would need to clone the git repo and ensure that they have all the required python packages (can be installed through pip) such as selenium, flask, twilio. As well as downloading and setting up ngrok and making a personal Twilio account along w/ personalized auth/identification keys.
