@@ -9,7 +9,7 @@ import MessageParser
 import config
 
 
-class MapScraper():
+class MapScraper:
     def __init__(self):
         self.PATH = "C:/Users/Aniruthan Ramadoss/chromedriver.exe"
         self.s = Service(self.PATH)
@@ -17,32 +17,46 @@ class MapScraper():
         self.driver.get("https://ridebt.org/routes-schedules")
 
     def schedule_query(self, text_message, client, user):
-        query_info = MessageParser.parse_message(text_message)
-        parsed = [int(x) for x in query_info[3].split(':')]
-        query_time = datetime.today().replace(hour=parsed[0], minute=parsed[1], second=0)
-        delta = query_time - datetime.now()
+        try:
+            query_info = MessageParser.parse_message(text_message)
+            parsed = [int(x) for x in query_info[3].split(':')]
+            query_time = datetime.today().replace(hour=parsed[0], minute=parsed[1], second=0)
+            delta = query_time - datetime.now()
 
-        print(f'delta: {delta.seconds}')
-        timer = threading.Timer(delta.seconds, self.send_message, [query_info, client, user])
-        timer.start()
+            print(f'delta: {delta.seconds}')
+            timer = threading.Timer(delta.seconds, self.send_message, [query_info, client, user])
+            timer.start()
 
-        print('Scheduled!!!')
+            print('Scheduled!!!')
+        except:
+            client.messages.create(from_=config.phone_number,
+                                   to=user,
+                                   body="Your request was invalid. \nAn example of a valid message is\nTOM, Torgersen "
+                                        "Hall, 1114, 21:33")
 
     def send_message(self, query_info, client, user):
-        result = '\n'.join(self.query_routes(query_info))
-        client.messages.create(from_=config.phone_number,
-                               to=user,
-                               body=result)
+        try:
+            result = '\n'.join(self.query_routes(query_info))
+            client.messages.create(from_=config.phone_number,
+                                   to=user,
+                                   body=result)
+        except:
+            client.messages.create(from_=config.phone_number,
+                                   to=user,
+                                   body="Your request was invalid. \nAn example of a valid message is\nTOM, Torgersen "
+                                        "Hall, 1114, 21:33")
 
     def query_routes(self, query_information):
+        print(query_information)
         bus, location, stop_code, _ = query_information
 
         result = []
         # Get Stopcode
-        stop_code = self.bt_dict[location] if stop_code == "" else stop_code
+        stop_code = self.bt_dict[location] if stop_code is None else stop_code
 
         # If there is a bus specified
-        result = self.query_routes_with_bus(bus, stop_code) if bus != "" else self.query_routes_with_stopcode(stop_code)
+        result = self.query_routes_with_bus(bus, stop_code) if bus is not None else self.query_routes_with_stopcode(
+            stop_code)
 
         return result
 

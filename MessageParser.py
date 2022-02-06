@@ -5,10 +5,37 @@ def parse_message(text_message):
     message = text_message.split(",")
     for i in range(0, len(message)):
         message[i] = message[i].lstrip()
-    bus_route = message[0]
-    location = message[1]
-    stop_code = message[2]
-    requested_time = message[3]
+
+    bus_route, location, stop_code, requested_time = None, None, None, None
+
+    length = len(message)
+    if length == 2:
+        # 1114, 21:33
+        if len(message[0]) == 4:
+            stop_code = message[0]
+        # Torgersen Hall, 21:33
+        elif len(message[0]) > 4:
+            location = message[0]
+        requested_time = message[1]
+    elif length == 3:
+        if len(message[0]) == 3:
+            bus_route = message[0]
+            # TOM, 1114, 21:33
+            if len(message[1]) == 4:
+                stop_code = message[1]
+            # TOM, Torgersen Hall, 21:33
+            elif len(message[1]) > 4:
+                location = message[1]
+            requested_time = message[2]
+        # Torgersen Hall, 1114, 21:33
+        elif len(message[0]) > 3:
+            location = message[0]
+            stop_code = message[1]
+            requested_time = message[2]
+    # TOM, Torgersen Hall, 1114, 21:33
+    else:
+        bus_route, location, stop_code, requested_time = message[0], message[1], message[2], message[3]
+
     if len(requested_time) == 4:
         requested_time = "0" + requested_time
 
