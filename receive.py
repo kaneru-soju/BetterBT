@@ -5,9 +5,11 @@ import config
 from twilio.rest import Client
 from pyngrok import ngrok
 
+from MapScraper import MapScraper
+
+
 app = Flask(__name__)
 client = Client(config.account_SID, config.auth_token)
-
 
 @app.route('/bot', methods=['POST'])
 def bot():
@@ -16,18 +18,19 @@ def bot():
 
     print(f"Got a message from: {user}")
 
+    message = request.form["Body"]
+
+    print(message)
+
+    scraper = MapScraper()
+    scraper.schedule_query(message, client, user)
+
     print("\n\n Printing Form Values \n\n")
     for value in request.form:
         print(f"Type {type(value)} : {value}")
     print("Message was: " + request.form["Body"])
 
     return str(resp)
-
-
-def send_message(number, msg):
-    client.messages.create(from_=config.phone_number,
-                           to=number,
-                           body=msg)
 
 
 def start_ngrok():

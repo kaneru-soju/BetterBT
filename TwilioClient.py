@@ -8,5 +8,7 @@ class TwilioClient():
     def __init__(self):
         self.client = TwilioRestClient(config.account_SID, config.auth_token)
 
-    def send_text(self, to_number, from_number):
-        client.messages.create(to="+15404437433")
+    def send_message(number, msg):
+        self.client.messages.create(from_=config.phone_number,
+                               to=number,
+                               body=msg)

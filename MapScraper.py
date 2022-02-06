@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 import threading
 
 import MessageParser
+import config
 
 
 class MapScraper():
@@ -15,31 +16,35 @@ class MapScraper():
         self.driver = webdriver.Chrome(service=self.s)
         self.driver.get("https://ridebt.org/routes-schedules")
 
-    def schedule_query(self, text_message):
+    def schedule_query(self, text_message, client, user):
         query_info = MessageParser.parse_message(text_message)
         parsed = [int(x) for x in query_info[3].split(':')]
         query_time = datetime.today().replace(hour=parsed[0], minute=parsed[1], second=0)
         delta = query_time - datetime.now()
 
         print(f'delta: {delta.seconds}')
-        timer = threading.Timer(delta.seconds, self.query_routes, [query_info])
+        timer = threading.Timer(delta.seconds, self.send_message, [query_info, client, user])
         timer.start()
 
         print('Scheduled!!!')
+
+    def send_message(self, query_info, client, user):
+        result = '\n'.join(self.query_routes(query_info))
+        client.messages.create(from_=config.phone_number,
+                               to=user,
+                               body=result)
 
     def query_routes(self, query_information):
         bus, location, stop_code, _ = query_information
 
         result = []
         # Get Stopcode
-        if stop_code == "":
-            stop_code = self.bt_dict[query_information[1]]
+        stop_code = self.bt_dict[location] if stop_code == "" else stop_code
 
         # If there is a bus specified
-        if bus != "":
-            self.query_routes_with_bus(bus, stop_code)
-        else:
-            self.query_routes_with_stopcode(stop_code)
+        result = self.query_routes_with_bus(bus, stop_code) if bus != "" else self.query_routes_with_stopcode(stop_code)
+
+        return result
 
     def query_routes_with_bus(self, bus, stop_code):
         result = []
@@ -253,6 +258,6 @@ class MapScraper():
                'Shoppers Way Wbnd': '2209',
                'Shoppers Way Ebnd': '2226'}
 
-
-scraper = MapScraper()
-scraper.schedule_query("TOM, Torgersen Hall, 1114, 20:31")
+#
+# scraper = MapScraper()
+# scraper.schedule_query("TOM, Torgersen Hall, 1114, 20:31")
