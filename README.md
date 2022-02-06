@@ -46,7 +46,7 @@ Some images that show our application's results:
 ### 2 Arguments with Stopcode, no Location:
 ![BetterBT_2_Arguments_Stopcode](https://github.com/kaneru-soju/BetterBT/blob/master/Images/BetterBT_2_Arguments_Stopcode.jpg)
 
-### 3 Arugments:
+### 3 Arguments:
 ![BetterBT_3_Arguments](https://github.com/kaneru-soju/BetterBT/blob/master/Images/BetterBT_3_Arguments.jpg)
 
 ### 4 Arguments:
